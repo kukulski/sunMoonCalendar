@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title></title>
+    <style type="text/css">
+
+          /*div {*/
+               /*border:  1px solid red;*/
+        /*}*/
+
+
+        body {
+            counter-reset: month 1;
+
+        }
+
+        div {
+              counter-increment: dayOfWeek dayOfMonth dayOfYear;
+                    }
+
+
+
+        div::before {
+            content: "Day"  counter(dayOfWeek) ":" counter(dayOfMonth) ":"counter(dayOfYear);
+        }
+
+        div:nth-child(7n+1) {
+            counter-reset: dayOfWeek;
+        }
+
+        div[newMonth] {counter-reset: dayOfMonth;}
+        p:before {
+            content: "Month:" counter(month);
+            counter-increment:month;
+            counter-reset: dayOfMonth 1;
+        }
+
+
+    </style>
+
+</head>
+<body>
+<div ></div>
+<div monday=true></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div monday=true></div>
+<div></div>
+<div></div>
+<div></div>
+<div newmonth=true></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+
+<p></p>
+
+<p></p>
+
+<p></p>
+
+<p></p>
+
+<p></p>
+
+
+</body>
+</html>

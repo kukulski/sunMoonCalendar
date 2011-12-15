@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+
+<script src="mustache.js" type="text/javascript"></script>
+
+
+<script id="mytemplate" type="text/mustache">
+    {{#result}}
+    <div data-foo="{{bar}}">{{foo}}</div>
+    {{/result}}
+</script>
+
+<head>
+    <title></title>
+</head>
+
+
+<body>
+
+<div id="target"></div>
+
+<script type="text/javascript">
+
+    var view = {result: [ {foo:"lish", bar:"baric"}, {foo:"tile", bar:"imetric"}] };
+    var template = document.getElementById("mytemplate").textContent;
+    var expanded = Mustache.to_html(template, view);
+    document.getElementById("target").innerHTML = expanded;
+
+</script>
+
+</body>
+</html>
