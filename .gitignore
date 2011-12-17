@@ -5,6 +5,6 @@ calendarDabble/calendarDabble.iml
 
 .DS_Store
 
-calendarDabble/.idea/.name
+.idea/
 
-calendarDabble/.idea/calendarDabble.iml
+*~
