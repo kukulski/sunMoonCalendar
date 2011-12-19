@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="Calendar.js"></script>
+    <title></title>
+</head>
+<style>
+
+    body {
+        font-family: Futura, Helvetica
+    }
+    #container {
+        position: absolute;
+        background-color: #bada55;
+        width: 128em;
+        height: 128em;
+        left: 128em;
+        top: 128em;
+        display: block;
+    }
+    #background {
+        position: absolute;
+        top: 0;
+        left:0;
+        height: 256em;
+        display: block;
+        width: 256em;
+        background-color: #ddd;
+    }
+    .extra {position: absolute;
+        left: 0;
+        display: block;
+        top: 0;
+    }
+
+    .dayOfMonth {
+        position: absolute;
+        left: 1080pt;
+        text-align: right;
+        width: 2em;
+          position: absolute;
+          display: block;
+    }
+    .monthNameExtra {
+        position: absolute;
+        left: 1128pt;
+        /*display: block;*/
+
+    }
+     .dayOfYear {
+        left: 1050pt;
+        position: absolute;
+        display: block;
+        opacity: .3;
+        text-align: right;
+        width: 30pt;
+    }
+    .hours {
+        -webkit-transform:rotate(90deg);
+        -webkit-transform-origin: 100% 100%;
+          position: absolute;
+        display: block;
+        left: 0;
+        bottom: 0;
+        font-size: 6pt;
+        text-align: right;
+        line-height: 6pt;
+    }
+
+    .monthName{
+        position: absolute;
+        left: 0;
+        text-align: left;
+        display: block;
+        -webkit-transform:matrix(0,1,-1,0,0,0);
+        -webkit-transform-origin: -5px -10%;
+    }
+
+    [data-weekend] {
+        opacity: .4;
+    }
+</style>
+
+
+<body>
+<div id='background'></div>
+<div id='container'></div>
+<script>
+
+
+
+    var xc = document.width/2;
+    var yx = document.height/2;
+
+var container = document.getElementById('container');
+    var built = '';
+
+
+function paddedHoursString(day) {
+    var hoursText = day.hoursArray().join('\n');
+    var slot = 6;
+
+    var hoursPadding = 24*slot +8;  // better would be to align to UTC
+    var todayOffset = day.getTimezoneOffset();
+    var tomorrowOffset = day.tomorrow().getTimezoneOffset();
+    if(day.isDST()) hoursPadding++;
+    if(todayOffset < tomorrowOffset) hoursPadding--;
+    else if(tomorrowOffset < todayOffset) hoursPadding++;
+//    if(day.getTimezoneOffset() < )
+//   if(day.tomorrow().isDST()) hoursPadding++;
+//    if(day.midnight().isDST() && !day.tomorrow().midnight().isDST()) hoursPadding--;
+
+    for(var i = 0; i < hoursPadding; i++)
+        hoursText+= '\n';
+    return hoursText;
+}
+ function degreeAngle(date) {
+     return 360 * date.getFraction();
+ }
+
+    var date = Date.fromYearAndDay(2012,1);
+    var count = date.getNumberOfDays();
+    for(var i = 1; i <= count; i++) {
+            var day = Date.fromYearAndDay(2012,i);
+
+        var weekend = day.getDay() %6 == 0;
+        
+        var pattern = '<div class="extra" style="-webkit-transform:rotate(Rdeg)"><div class="dayOfYear">DOY</div><div class="dayOfMonth">DOM</div><pre class="hours" WEEKEND>HOURS</pre></div>';
+              built += pattern.replace('DOY', i.toString())
+                      .replace('R',degreeAngle(day)-90)
+                      .replace('WEEKEND',weekend?'data-weekend="true"':'')
+                        .replace('DOM',day.getDate())
+        .replace('HOURS', paddedHoursString(day));
+    }
+
+    for(var m = 0; m < 12; m++) {
+        var firstOfMonth = new Date(2012, m, 1);
+
+        var pattern = '<div class="extra" style="-webkit-transform:rotate(Rdeg)"><div class="monthNameExtra"><div class ="monthName">MONTHNAME</div></div></div>';
+        built += pattern.replace('R',degreeAngle(firstOfMonth)-90)
+                .replace('MONTHNAME',firstOfMonth.getMonthName());
+    }
+    container.innerHTML = built;
+
+
+</script></body>
+</html>

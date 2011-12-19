@@ -7,6 +7,7 @@ var Calendar = {};
 //
 //    }
     Date.monthNames =  'January,February,March,April,May,June,July,August,September,October,November,December'.split(',');
+    Date.kOneDay = 24*60*60*1000;
 
     Date.fromYearAndDay = function(year,num) {
         var startOfYear = new Date(year,0,0);
@@ -33,13 +34,16 @@ var Calendar = {};
         var jan1 = this.jan1();
         var midnight = this.midnight();
         var elapsed = midnight.getTime() - jan1.getTime();
-        return Math.round(elapsed/(1000*24*60*60));
+        return Math.round(elapsed/Date.kOneDay);
     };
 
     Date.prototype.getFraction = function() {
         var day = this.getDayOfYear();
         var total = this.getNumberOfDays();
         return day/total;
+    };
+    Date.prototype.tomorrow = function() {
+      return new Date(this.getTime()+Date.kOneDay);
     };
     Date.prototype.firstOfMonth = function() {
         return new Date(this.getYear(), this.getMonth(), 1);
@@ -83,19 +87,33 @@ var Calendar = {};
         var startTime = this.midnight().getTime();
         var startDate = this.getDate();
         var rval = [];
-        var thisHour;
+        var thisHour = new Date(startTime);
         while(true) {
             thisHour = new Date(startTime);
-            thisDate = thisHour.getDate();
+            var thisDate = thisHour.getDate();
             if(thisDate != startDate) break;
-              var theHour = thisHour.getHours()%12;
-                               if(theHour == 0) theHour += 12;
-            startTime += 1000*60*60;
+            var theHour = thisHour.getHours()%12;
+            if(theHour == 0) theHour += 12;
+            //startTime += 3600000;
+            startTime = thisHour.getTime() + 3600000;
+            var altDate = new Date(thisHour.getTime());
+            var lastHour = new Date(thisHour.getTime());
+            altDate.setHours(altDate.getHours()+1);
+            if(lastHour.getTimezoneOffset() != altDate.getTimezoneOffset())
+                console.log(altDate.toString());
+
+            thisHour = new Date(startTime);
+            if(thisHour.getHours() != altDate.getHours())
+                console.log(thisHour.toString());
             rval.push(theHour);
         }
         return rval;
     }
 
+   
+ Date.prototype.degreeAngle = function(date) {
+     return 360 * date.getFraction();
+ };
 //   Calendar.Calendar = function() {
 //       this.year = arguments.length ? arguments[0] : new Date().getFullYear();
 //
